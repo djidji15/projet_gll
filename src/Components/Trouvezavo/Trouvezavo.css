@@ -1,0 +1,46 @@
+.trouvez-avocat1 {
+  margin-top: 30px;
+  margin-left: 70px;
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 1200px;
+  height: 180px;
+  flex-shrink: 0;
+  border-width: 0 4px 4px 0; /* 0px top, 2px right, 2px bottom, 0px left */
+  border-color: #987157;
+  border-style: solid;
+  background: url(../../Assets/contact.png);
+  text-align: center; /* Center text horizontally */
+}
+
+.trouvez-avocat1 h1 {
+  width: 553px;
+  color: #301f17;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 253.333%; /* 101.333px */
+  margin-top: 60px;
+}
+
+.trouvez-avocat1 button {
+  margin-bottom: 100px;
+  border: none;
+  border-radius: 50px;
+  background: #987157;
+  width: 180px;
+  height: 50px;
+  flex-shrink: 0;
+  color: #fff;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 800;
+  cursor: pointer;
+}

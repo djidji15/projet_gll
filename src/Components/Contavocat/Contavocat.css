@@ -1,0 +1,98 @@
+/* .image {
+  border-radius: 258.574px;
+  background: #d9d9d9;
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+.image img {
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.info-container p:nth-child(1) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 235px;
+  height: 25px;
+  margin-top: 10px; /* Adjust this value to control the distance */
+/* } */
+
+/* .info-container p:nth-child(2) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 230px;
+  margin-top: 0px; /* Adjust this value to control the distance */
+/* }
+.info-container p {
+  margin: 0;
+} */
+.avocat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avocat .image {
+  border-radius: 258.574px;
+  background: #d9d9d9;
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+
+.avocat .image img {
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+
+.avocat .info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avocat .info-container p:nth-child(1) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 235px;
+  height: 25px;
+  margin-top: 10px;
+}
+
+.avocat .info-container p:nth-child(2) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 230px;
+  margin-top: 0px;
+}
+
+.avocat .info-container p {
+  margin: 0;
+}

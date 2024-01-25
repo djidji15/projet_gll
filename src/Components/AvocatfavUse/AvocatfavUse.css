@@ -1,0 +1,71 @@
+.avocat2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avocat2 .image2 {
+  border-radius: 258.574px;
+  background: #d9d9d9;
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+
+.avocat2 .image2 img {
+  width: 240px;
+  height: 258.574px;
+  flex-shrink: 0;
+}
+
+.avocat2 .info-container3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avocat2 .info-container3 p:nth-child(1) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 235px;
+  height: 25px;
+  margin-top: 10px;
+}
+
+.avocat2 .info-container3 p:nth-child(2) {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: 230px;
+  margin-top: 10px;
+}
+
+.avocat2 .info-container3 p {
+  margin: 0;
+}
+.avocat2 .info-container3 button {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #301f17;
+  width: 142px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 40px;
+  background: #d9d9d9;
+  color: #301f17;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}

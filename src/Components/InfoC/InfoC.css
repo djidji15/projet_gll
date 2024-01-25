@@ -1,0 +1,64 @@
+.bienvenue-container {
+  color: #301f17;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.info-container2 input {
+  font-family: Inknut Antiqua;
+  width: 130px;
+  height: 30px;
+  margin-left: 20px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  border: 2px solid #301f17;
+  flex-shrink: 0;
+}
+.info-container2 p:first-of-type {
+  margin-left: 10px;
+  color: #000;
+  font-family: 'Inknut Antiqua';
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.info-container2 p {
+  margin-left: 50px;
+  color: #3c3c3c;
+  font-family: 'Inknut Antiqua';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.info-container2 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1050px;
+  height: 250px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 4px solid #301f17;
+  background: #d9d9d9;
+}
+.info-container2 button {
+  margin-left: 900px;
+  border-radius: 10px;
+  border: 2px solid #301f17;
+  width: 140px;
+  height: 35px;
+  flex-shrink: 0;
+  background: #987157;
+  color: #fff;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  cursor: pointer;
+}

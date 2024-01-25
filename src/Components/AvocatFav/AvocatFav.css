@@ -1,0 +1,26 @@
+.avocat-ved-container {
+  border-top: 1px solid #301f17;
+  border-bottom: 1px solid #301f17;
+  background: linear-gradient(
+    141deg,
+    #987157 22.32%,
+    #937664 36%,
+    #868181 52.45%
+  );
+}
+.avocat-ved-container h1 {
+  color: #d9d9d9;
+  text-align: center;
+  font-family: Inknut Antiqua;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.mySwiper .swiper-button-next {
+  color: #301f17; /* Change the color to your desired color */
+}
+
+.mySwiper .swiper-button-prev {
+  color: #301f17; /* Change the color to your desired color */
+}

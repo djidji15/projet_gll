@@ -1,0 +1,46 @@
+.everything-all h1 {
+  color: #301f17;
+  text-align: center;
+  font-family: 'Inknut Antiqua';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.everything-all {
+  background: #d9d9d9;
+  margin-top: 50px;
+  margin-bottom: 60px;
+}
+.Rendez-passe-container p {
+  color: #000;
+  font-family: 'Inknut Antiqua';
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.Rendez-venir-container p {
+  color: #000;
+  font-family: 'Inknut Antiqua';
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.p-tags p {
+  color: #000;
+  font-family: 'Inknut Antiqua';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin: 0; /* Remove default margin to avoid extra spacing */
+  text-align: center; /* Optional: Center the text within each <p> tag */
+}
+.p-tags {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Optional: Center the items horizontally */
+  gap: 320px;
+}
