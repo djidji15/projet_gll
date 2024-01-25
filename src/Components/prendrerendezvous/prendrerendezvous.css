@@ -1,0 +1,53 @@
+.appointment-form {
+    max-width: 80%;
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box; /* Garantit que la taille déclarée inclut les bordures et les rembourrages */
+    padding: 20px;
+    
+}
+
+.appointment-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #470F17;
+}
+
+.appointment-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.appointment-form input,
+.appointment-form select {
+    width: 50%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.appointment-form button {
+    background-color: #470F17;
+    color: #D9D9D9;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 2vh;
+}
+
+.appointment-form button:hover {
+    background-color: #34070E;
+    color: #ddd;
+}
+
+.appointment-form p {
+    color: red;
+    margin-top: 10px;
+}

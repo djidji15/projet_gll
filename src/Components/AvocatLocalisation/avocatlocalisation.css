@@ -1,0 +1,16 @@
+
+  .localisation {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #D9D9D9;
+    padding: 1vh 7vh 5vh;
+    margin-bottom: 15vh;
+  }
+.localisation .titre {
+  text-align: center;
+  color: #987157;
+}
+.localisation .carte {
+  border: 0.5vh solid #987157;
+}

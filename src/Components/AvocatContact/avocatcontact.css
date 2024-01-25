@@ -1,0 +1,86 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Valeur arbitraire, assurez-vous qu'elle est plus élevée que le z-index du contenu sous-jacent */
+  
+  }
+  
+  .formContainer {
+    background-color: #9E9E9E;
+    padding: 4vh;
+    width: 50%;
+    height: 50%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001; /* Valeur plus élevée que le z-index de l'overlay pour s'assurer qu'il est au-dessus */
+    border: #470F17 solid 0.7vh;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #D9D9D9;
+    background-color: #c50606;
+    border: none;
+    padding: 0.5vh 0.8vh;
+  }
+
+  .contactrendezvous {
+    width: 70% ;
+    margin: auto;
+    margin-bottom: 15vh;
+  }
+  .contactrendezvous .contact .phoneemail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30vh;
+    margin-top: 6vh;
+  }
+  .contactrendezvous .contact {
+    border: #987157 solid 0.7vh;
+    border-radius: 4vh;
+    background-color: #D9D9D9;
+  }
+  .contactrendezvous .contact h1, h4 {
+    color: #987157;
+  }
+  .contactrendezvous .contact .phoneemail img{
+    height: 15vh;
+    width: 15vh;
+  }
+  .contactrendezvous .contact  h4 {
+    font-size: 2.5vh;
+  }
+  .contactrendezvous .buttonrendezvous button {
+      display: inline-block;
+      padding: 2vh 5vh;
+      margin-top: -1vh;
+      font-size: 2.5vh;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      border-radius: 3vh;
+      color: #D9D9D9;
+      background-color: #987157;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  
+
+  .contactrendezvous .buttonrendezvous button:hover {
+      background-color: #875F45;
+      color: #ffffff;
+      border-color: #ffffff;
+  }

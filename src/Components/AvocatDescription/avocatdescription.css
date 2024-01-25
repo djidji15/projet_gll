@@ -1,0 +1,14 @@
+.description {
+    background-color: #D9D9D9;
+    padding: 2vh 4vh;
+    margin-bottom: 15vh;
+}
+.description .titre {
+    text-align: center;
+    color: #987157;
+}
+.description .contenu p{
+    font-size: large;
+    line-height: 2;
+    color: black;
+}
