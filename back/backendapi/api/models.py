@@ -65,7 +65,7 @@ class LawyerProfile(models.Model):
 # Administrator model, using OneToOneField for a one-to-one relationship with User
 class Administrator(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, default='dji')
+    name = models.CharField(max_length=255)
 
 # TimeSlot model
 class TimeSlot(models.Model):
@@ -99,9 +99,12 @@ class LawyerImage(models.Model):
         return f"Image for {self.lawyer.user.username}"
 
 
+
 class LawyerDocument(models.Model):
     lawyer = models.ForeignKey(LawyerProfile, on_delete=models.CASCADE, related_name='documents')
     pdf_file = models.FileField(upload_to='core/docs', validators=[FileExtensionValidator(['pdf'])])
 
     def __str__(self):
         return f"Document for {self.lawyer.user.username}"
+
+

@@ -145,16 +145,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['client_name', 'rating', 'comment', 'date']
 
 
-""""
-class AdminProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Administrator
-        fields = '__all__'
-
-class LawyerProfileAdminListSerializer(serializers.ModelSerializer):
-    # Inclure les champs supplémentaires comme images, documents, etc.
-    # ...
-
-    class Meta:
-        model = LawyerProfile
-        fields = ['id', 'user', 'specialization', 'approved', 'images', 'documents', 'rating', 'language']"""
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(style={'input_type': 'password'})

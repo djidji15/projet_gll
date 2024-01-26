@@ -13,7 +13,7 @@ from rest_framework import generics, permissions
 from .models import LawyerProfile
 from .serializer import UserSerializer,AppointmentSerializer, ReviewSerializer
 from django.contrib.auth.models import User
-from .serializer import LawyerProfileAdminListSerializer
+from .serializer import LawyerProfileAdminListSerializer,LoginSerializer
 from django.utils import timezone
 from django.db.models import Q
 from allauth.socialaccount.models import SocialAccount
@@ -33,6 +33,17 @@ from .serializer import  LawyerProfileAdminListSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
+from rest_framework import status, permissions
+from django.contrib.auth import authenticate, login, logout
+from rest_framework import status, permissions
+from django.contrib.auth import authenticate, login, logout
+from .serializer import LoginSerializer
+from django.contrib.auth import authenticate, login, logout
+from .serializer import LoginSerializer
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_info_from_google_token(request):
@@ -64,7 +75,7 @@ def get_user_info_from_google_token(request):
 # class GoogleAccessTokenView(APIView):
 #     permission_classes = [IsAuthenticated]
 
-#     def get(self, request, *args, **kwargs):
+#     def get( self , request, *args, **kwargs):
 #         try:
 #             google_account = SocialAccount.objects.get(user=request.user, provider='google')
 #             google_token = google_account.socialtoken_set.get()
@@ -201,7 +212,16 @@ class ClientProfileViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
+        
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def my_profile(self, request):
+        user = request.user
+        try:
+            client_profile = ClientProfile.objects.get(user=user)
+            serializer = self.get_serializer(client_profile)
+            return Response(serializer.data)
+        except ClientProfile.DoesNotExist:
+            return Response({'error': 'Profil client non trouvé'}, status=404)        
 
 
 class LawyerAdminDashboardViewSet(viewsets.ModelViewSet):
@@ -219,37 +239,16 @@ class LawyerAdminDashboardViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response({'message': 'Avocat supprimé avec succès.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Vous pouvez personnaliser ce message en fonction de l'exception
+            return Response({'error': f'Erreur lors de la suppression de l\'avocat : {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
 
-"""@method_decorator(csrf_exempt, name='dispatch')
-class AdminProfileViewSet(viewsets.ModelViewSet):
-    queryset = Administrator.objects.all()
-    serializer_class = AdminProfileSerializer
-    permission_classes = [permissions.IsAdminUser]
-
-    def perform_create(self, serializer):
-        user = self.request.user
-
-        # Assurer que l'utilisateur n'a pas déjà un profil d'administrateur
-        if Administrator.objects.filter(user=user).exists():
-            raise PermissionDenied('Ce compte a déjà un profil d’administrateur.')
-
-        # Créer le profil d'administrateur
-        serializer.save(user=user)
-
-    def list(self, request, *args, **kwargs):
-        # Afficher la liste des profils d'avocats avec images et documents pour l'admin
-        lawyer_profiles = LawyerProfile.objects.prefetch_related('images', 'documents').all()
-        serializer = LawyerProfileAdminListSerializer(lawyer_profiles, many=True)
-        return Response(serializer.data)
-
-    def update(self, request, *args, **kwargs):
-        # Mettre à jour le statut d'approbation d'un profil d'avocat
-        lawyer_id = kwargs.get('pk')
-        lawyer_profile = LawyerProfile.objects.get(id=lawyer_id)
-        lawyer_profile.approved = request.data.get('approved', lawyer_profile.approved)
-        lawyer_profile.save()
-        return Response({'message': 'Profil mis à jour avec succès.'}, status=status.HTTP_200_OK)
-"""
 @api_view(['GET'])
 def lawyer_profile_search(request):
     lawyer_category = request.GET.get('lawyer_category', '')
@@ -396,3 +395,67 @@ def average_rating_for_lawyer(request, lawyer_id):
         return Response({'error': 'Aucune review trouvée pour cet avocat'}, status=404)
 
     return Response({'average_rating': average_rating})
+
+
+class LawyerLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None and user.groups.filter(name='Lawyer').exists():
+                login(request, user)
+                return Response({'detail': 'Connexion réussie.'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Informations de connexion invalides ou lutilisateur nest pas un avocat.'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
+    
+class ClientLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None and ClientProfile.objects.filter(user=user).exists():
+                login(request, user)
+                return Response({'detail': 'Connexion réussie.'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Informations de connexion invalides ou lutilisateur nest pas un client.'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
+    
+class AdminLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None and user.is_superuser:
+                login(request, user)
+                return Response({'detail': 'Connexion réussie.'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Informations de connexion invalides ou l\'utilisateur n\'est pas un administrateur.'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
