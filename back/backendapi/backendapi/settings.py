@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework.authtoken',
-    'dj_rest_auth'
+    'dj_rest_auth',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [

@@ -28,7 +28,11 @@ from django.utils import timezone
 from .models import LawyerProfile, ClientProfile, TimeSlot, Appointment
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
-
+from .models import LawyerProfile, Administrator
+from .serializer import  LawyerProfileAdminListSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework import viewsets
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_info_from_google_token(request):
@@ -202,13 +206,50 @@ class ClientProfileViewSet(viewsets.ModelViewSet):
 
 class LawyerAdminDashboardViewSet(viewsets.ModelViewSet):
     queryset = LawyerProfile.objects.prefetch_related('images', 'documents').all()
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAdminUser]  # Assurez-vous que seuls les utilisateurs admin y ont accès
     serializer_class = LawyerProfileAdminListSerializer
 
     def create(self, request, *args, **kwargs):
         return Response({'error': 'Method Not Allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+"""@method_decorator(csrf_exempt, name='dispatch')
+class AdminProfileViewSet(viewsets.ModelViewSet):
+    queryset = Administrator.objects.all()
+    serializer_class = AdminProfileSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+
+        # Assurer que l'utilisateur n'a pas déjà un profil d'administrateur
+        if Administrator.objects.filter(user=user).exists():
+            raise PermissionDenied('Ce compte a déjà un profil d’administrateur.')
+
+        # Créer le profil d'administrateur
+        serializer.save(user=user)
+
+    def list(self, request, *args, **kwargs):
+        # Afficher la liste des profils d'avocats avec images et documents pour l'admin
+        lawyer_profiles = LawyerProfile.objects.prefetch_related('images', 'documents').all()
+        serializer = LawyerProfileAdminListSerializer(lawyer_profiles, many=True)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        # Mettre à jour le statut d'approbation d'un profil d'avocat
+        lawyer_id = kwargs.get('pk')
+        lawyer_profile = LawyerProfile.objects.get(id=lawyer_id)
+        lawyer_profile.approved = request.data.get('approved', lawyer_profile.approved)
+        lawyer_profile.save()
+        return Response({'message': 'Profil mis à jour avec succès.'}, status=status.HTTP_200_OK)
+"""
 @api_view(['GET'])
 def lawyer_profile_search(request):
     lawyer_category = request.GET.get('lawyer_category', '')

@@ -65,6 +65,7 @@ class LawyerProfile(models.Model):
 # Administrator model, using OneToOneField for a one-to-one relationship with User
 class Administrator(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, default='dji')
 
 # TimeSlot model
 class TimeSlot(models.Model):

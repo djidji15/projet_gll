@@ -1,6 +1,7 @@
 
 from rest_framework import serializers
 from .models import Address, LawyerProfile, LawyerImage, LawyerDocument , ClientProfile , User , TimeSlot , Appointment , Review
+from .models import Administrator, LawyerProfile
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -131,10 +132,7 @@ class LawyerProfileAdminListSerializer(serializers.ModelSerializer):
         model = LawyerProfile
         fields = ['id','first_name', 'last_name', 'specialization', 'images', 'documents' , 'approved']
 
-"""class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = ['lawyer', 'client', 'rating', 'comment', 'date']"""
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     client_name = serializers.SerializerMethodField()
@@ -145,3 +143,18 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['client_name', 'rating', 'comment', 'date']
+
+
+""""
+class AdminProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Administrator
+        fields = '__all__'
+
+class LawyerProfileAdminListSerializer(serializers.ModelSerializer):
+    # Inclure les champs supplémentaires comme images, documents, etc.
+    # ...
+
+    class Meta:
+        model = LawyerProfile
+        fields = ['id', 'user', 'specialization', 'approved', 'images', 'documents', 'rating', 'language']"""
