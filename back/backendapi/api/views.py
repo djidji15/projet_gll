@@ -104,15 +104,25 @@ class TimeSlotViewSet(viewsets.ModelViewSet):
 
 
 class LawyerImageViewSet(viewsets.ModelViewSet):
-    serializer_class = LawyerImageSerializer
+    """
+    Vue pour gérer les images associées aux profils d'avocats.
+
+    Cette vue permet de lister, créer, récupérer, mettre à jour et supprimer des images pour un avocat spécifique.
+    """
 
     def get_serializer_context(self):
+        """
+        Ajoute l'identifiant du profil d'avocat au contexte du serializer.
+        """
         context = super().get_serializer_context()
         lawyer_profile_pk = self.kwargs['lawyer_pk']
         context['lawyer_profile_pk'] = lawyer_profile_pk
         return context
     
     def get_queryset(self):
+        """
+        Retourne un queryset des images pour l'avocat spécifié dans l'URL.
+        """
         lawyer_profile_pk = self.kwargs['lawyer_pk']
         return LawyerImage.objects.filter(lawyer_id=lawyer_profile_pk)
 
@@ -135,15 +145,29 @@ class LawyerDocumentViewSet(viewsets.ModelViewSet):
 
 
 class LawyerProfileViewSet(viewsets.ModelViewSet):
+    """
+    Vue pour gérer les profils d'avocats.
+
+    Cette vue permet de lister, créer, récupérer, mettre à jour et supprimer des profils d'avocats.
+    Les utilisateurs authentifiés peuvent accéder à cette vue, mais seuls les avocats approuvés sont listés.
+    """
     queryset = LawyerProfile.objects.prefetch_related('images', 'documents').all()
     serializer_class = LawyerProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Retourne un queryset des profils d'avocats approuvés.
+        """
         return LawyerProfile.objects.filter(approved=True)
     
     @action(methods=['post'], detail=False, permission_classes=[permissions.AllowAny])
     def register(self, request, *args, **kwargs):
+        """
+        Action pour enregistrer un nouvel avocat.
+
+        Permet à n'importe quel utilisateur de créer un profil d'avocat.
+        """
         serializer = LawyerRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             lawyer_profile = serializer.save()
@@ -211,18 +235,33 @@ class LawyerProfileViewSet(viewsets.ModelViewSet):
 
 
 class ClientProfileViewSet(viewsets.ModelViewSet):
+    """
+    Vue pour gérer les profils de clients.
+
+    Cette vue permet de lister, créer, récupérer, mettre à jour et supprimer des profils de clients.
+    Les utilisateurs authentifiés peuvent accéder à cette vue, mais un avocat ne peut pas voir ou créer des profils de clients.
+    """
     queryset = ClientProfile.objects.all()
     serializer_class = ClientProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Retourne un queryset des profils de clients pour l'utilisateur connecté, sauf si l'utilisateur est un avocat.
+        """
         user = self.request.user
         if LawyerProfile.objects.filter(user=user).exists():
             raise PermissionDenied('Lawyers cannot see a client profile')
         else:
             return ClientProfile.objects.filter(user=user)
+        
     @action(methods=['post'], detail=False, permission_classes=[permissions.AllowAny])
     def register(self, request, *args, **kwargs):
+        """
+        Action pour enregistrer un nouveau client.
+
+        Permet à n'importe quel utilisateur de créer un profil de client.
+        """
         serializer = ClientRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             client_profile = serializer.save()
@@ -258,6 +297,11 @@ class ClientProfileViewSet(viewsets.ModelViewSet):
 
 
 class LawyerAdminDashboardViewSet(viewsets.ModelViewSet):
+    """
+    Vue pour gérer le tableau de bord administratif des avocats.
+
+    Permet la consultation et la modification des profils d'avocats par les administrateurs.
+    """
     queryset = LawyerProfile.objects.prefetch_related('images', 'documents').all()
     permission_classes = [permissions.IsAdminUser]  # Assurez-vous que seuls les utilisateurs admin y ont accès
     serializer_class = LawyerProfileAdminListSerializer
@@ -284,6 +328,11 @@ class LawyerAdminDashboardViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def lawyer_profile_search(request):
+    """
+    Recherche de profils d'avocats.
+
+    Permet de rechercher des profils d'avocats en fonction de critères spécifiques.
+    """
     lawyer_category = request.GET.get('lawyer_category', '')
     location = request.GET.get('location', '')
     language = request.GET.get('language', '')
@@ -321,6 +370,12 @@ def lawyer_profile_search(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_appointment(request):
+    """
+    Crée un rendez-vous entre un avocat et un client.
+
+    Permet à un client de planifier un rendez-vous avec un avocat.
+    """
+
     lawyer_id = request.data.get('lawyer_id')
     date = request.data.get('date')
     start_time_str = request.data.get('start_time')
@@ -358,6 +413,11 @@ def create_appointment(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def appointments_for_lawyer(request):
+    """
+    Liste les rendez-vous pour un avocat.
+
+    Renvoie la liste des rendez-vous planifiés pour l'avocat connecté.
+    """
     user = request.user
     try:
         lawyer_profile = LawyerProfile.objects.get(user=user)
@@ -371,6 +431,11 @@ def appointments_for_lawyer(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def appointments_for_client(request):
+    """
+    Liste les rendez-vous pour un client.
+
+    Renvoie la liste des rendez-vous planifiés pour le client connecté.
+    """
     user = request.user
     try:
         client_profile = ClientProfile.objects.get(user=user)
@@ -407,9 +472,46 @@ def create_review(request, lawyer_id):
     return Response(serializer.data, status=201)
 
 
-@api_view(['GET'])
+
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def reviews_for_lawyer(request, lawyer_id):
+    """
+    Liste les avis pour un avocat.
+
+    Renvoie la liste des avis laissés pour un avocat spécifique.
+    """
+    # Récupérer les données de la requête
+    rating = request.data.get('rating')
+    comment = request.data.get('comment')
+
+    # Vérifier si l'avocat existe
+    try:
+        lawyer = LawyerProfile.objects.get(pk=lawyer_id)
+    except LawyerProfile.DoesNotExist:
+        return Response({'error': 'Avocat non trouvé'}, status=404)
+
+    # Créer la review
+    review = Review.objects.create(
+        lawyer=lawyer,
+        client=request.user.clientprofile,
+        rating=rating,
+        comment=comment
+    )
+
+    # Serializer pour la réponse
+    serializer = ReviewSerializer(review)
+    return Response(serializer.data, status=201)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def average_rating_for_lawyer(request, lawyer_id):
+    """
+    Calcule la note moyenne d'un avocat.
+
+    Renvoie la note moyenne calculée à partir des avis sur l'avocat.
+    """
     try:
         reviews = Review.objects.filter(lawyer_id=lawyer_id)
     except Review.DoesNotExist:
@@ -431,9 +533,17 @@ def average_rating_for_lawyer(request, lawyer_id):
 
 
 class LawyerLoginView(APIView):
+    """
+    Vue pour la connexion des avocats.
+
+    Permet aux avocats de se connecter au système.
+    """
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
+        """
+        Traite les demandes POST pour la connexion des avocats.
+        """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
@@ -448,13 +558,24 @@ class LawyerLoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Traite les demandes DELETE pour la déconnexion des avocats.
+        """
         logout(request)
         return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
     
 class ClientLoginView(APIView):
+    """
+    Vue pour la connexion des clients.
+
+    Permet aux clients de se connecter au système.
+    """
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
+        """
+        Traite les demandes POST pour la connexion des clients.
+        """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
@@ -469,13 +590,24 @@ class ClientLoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Traite les demandes DELETE pour la déconnexion des clients.
+        """
         logout(request)
         return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
     
 class AdminLoginView(APIView):
+    """
+    Vue pour la connexion des administrateurs.
+
+    Permet aux administrateurs de se connecter au système.
+    """
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
+        """
+        Traite les demandes POST pour la connexion des administrateurs.
+        """
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
@@ -489,7 +621,10 @@ class AdminLoginView(APIView):
                 return Response({'detail': 'Informations de connexion invalides ou l\'utilisateur n\'est pas un administrateur.'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        """
+        Traite les demandes POST pour la connexion des administrateurs.
+        """
         logout(request)
         return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
     
