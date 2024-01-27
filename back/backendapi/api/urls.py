@@ -14,7 +14,7 @@ urlpatterns = [
 from django.urls import path
 from rest_framework_nested import routers
 from . import views
-from .views import create_appointment,appointments_for_lawyer,appointments_for_client,reviews_for_lawyer,average_rating_for_lawyer,get_user_info_from_google_token,LawyerAdminDashboardViewSet,LawyerLoginView,ClientLoginView,AdminLoginView 
+from .views import create_appointment,appointments_for_lawyer,appointments_for_client,reviews_for_lawyer,average_rating_for_lawyer,get_user_info_from_google_token,LawyerAdminDashboardViewSet,LawyerLoginView,ClientLoginView,AdminLoginView
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
@@ -46,6 +46,8 @@ urlpatterns = router.urls + lawyers_router.urls +  lawyers_dashbord.urls + [
     path('api/lawyer-login/', LawyerLoginView.as_view(), name='api_lawyer_login'),
     path('api/client-login/', ClientLoginView.as_view(), name='api_client_login'),
     path('api/admin-login/', AdminLoginView.as_view(), name='api_admin_login'),
+    #path('password-reset/', PasswordResetView.as_view(), name='password_reset'),
+    #path('password-reset-confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
     path('', include(router.urls)),

@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from rest_framework import generics, permissions
 from .models import LawyerProfile
-from .serializer import UserSerializer,AppointmentSerializer, ReviewSerializer
+from .serializer import UserSerializer,AppointmentSerializer, ReviewSerializer, LawyerRegistrationSerializer
 from django.contrib.auth.models import User
 from .serializer import LawyerProfileAdminListSerializer,LoginSerializer
 from django.utils import timezone
@@ -39,10 +39,13 @@ from rest_framework import status, permissions
 from django.contrib.auth import authenticate, login, logout
 from .serializer import LoginSerializer
 from django.contrib.auth import authenticate, login, logout
-from .serializer import LoginSerializer
+from .serializer import LoginSerializer,ClientRegistrationSerializer
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -138,6 +141,23 @@ class LawyerProfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return LawyerProfile.objects.filter(approved=True)
+    
+    @action(methods=['post'], detail=False, permission_classes=[permissions.AllowAny])
+    def register(self, request, *args, **kwargs):
+        serializer = LawyerRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            lawyer_profile = serializer.save()
+
+            # Ajouter l'utilisateur au groupe 'Lawyer'
+            group, _ = Group.objects.get_or_create(name='Lawyer')
+            lawyer_profile.user.groups.add(group)
+
+            return Response({
+                'username': lawyer_profile.user.username,
+                'specialization': lawyer_profile.specialization
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -201,7 +221,20 @@ class ClientProfileViewSet(viewsets.ModelViewSet):
             raise PermissionDenied('Lawyers cannot see a client profile')
         else:
             return ClientProfile.objects.filter(user=user)
-
+    @action(methods=['post'], detail=False, permission_classes=[permissions.AllowAny])
+    def register(self, request, *args, **kwargs):
+        serializer = ClientRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            client_profile = serializer.save()
+            return Response({
+                'username': client_profile.user.username,
+                'first_name': client_profile.user.first_name,
+                'last_name': client_profile.user.last_name,
+                'age': client_profile.age,
+                'gender': client_profile.gender,
+                'phone_number': client_profile.phone_number
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def perform_create(self, serializer):
         user = self.request.user
         if LawyerProfile.objects.filter(user=user).exists():
@@ -459,3 +492,41 @@ class AdminLoginView(APIView):
     def delete(self, request, *args, **kwargs):
         logout(request)
         return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
+    
+
+"""class PasswordResetView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            user = User.objects.filter(email=email).first()
+            if user:
+                token = default_token_generator.make_token(user)
+                # Envoyer l'email ici (à implémenter)
+                send_mail(
+                    'Réinitialisation du mot de passe',
+                    f'Votre jeton de réinitialisation est : ',
+                    'from@example.com',
+                    [user.email],
+                    fail_silently=False,
+                )
+                return Response({'detail': 'E-mail de réinitialisation envoyé.'})
+            return Response({'detail': 'Aucun utilisateur trouvé avec cet e-mail.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetConfirmView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        if serializer.is_valid():
+            user = User.objects.get(email=serializer.validated_data['email'])
+            token = serializer.validated_data['token']
+            if default_token_generator.check_token(user, token):
+                user.set_password(serializer.validated_data['new_password'])
+                user.save()
+                return Response({'detail': 'Mot de passe réinitialisé avec succès.'})
+            return Response({'detail': 'Jeton invalide.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    """

@@ -2,6 +2,8 @@
 from rest_framework import serializers
 from .models import Address, LawyerProfile, LawyerImage, LawyerDocument , ClientProfile , User , TimeSlot , Appointment , Review
 from .models import Administrator, LawyerProfile
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.forms import PasswordResetForm
 
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -148,3 +150,87 @@ class ReviewSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(style={'input_type': 'password'})
+
+class LawyerRegistrationSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = LawyerProfile
+        fields = ['username', 'password', 'email', 'first_name', 'last_name', 'specialization', 'phone_number', 'bio', 'language']
+
+    def create(self, validated_data):
+        user_data = {
+            'username': validated_data.pop('username'),
+            'password': validated_data.pop('password'),
+            'email': validated_data.pop('email'),
+            'first_name': validated_data.pop('first_name'),
+            'last_name': validated_data.pop('last_name')
+        }
+        user = User.objects.create_user(**user_data)
+        lawyer_profile = LawyerProfile.objects.create(user=user, **validated_data)
+        return lawyer_profile
+    
+class ClientRegistrationSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
+    first_name = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = ClientProfile
+        fields = ['username', 'password', 'email', 'first_name', 'last_name', 'age', 'gender', 'phone_number']
+
+    def create(self, validated_data):
+        user_data = {
+            'username': validated_data.pop('username'),
+            'password': validated_data.pop('password'),
+            'email': validated_data.pop('email'),
+            'first_name': validated_data.pop('first_name'),
+            'last_name': validated_data.pop('last_name')
+        }
+        user = User.objects.create_user(**user_data)
+        client_profile = ClientProfile.objects.create(user=user, **validated_data)
+        return client_profile
+    
+
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        # Vérifier si l'email existe dans la base de données
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Nous n'avons pas trouvé d'utilisateur avec cet adresse e-mail.")
+        return value
+
+    def save(self):
+        request = self.context.get('request')
+        # Créer un objet PasswordResetForm et l'utiliser pour envoyer l'email
+        options = {
+            'use_https': request.is_secure(),
+            'from_email': None,  # Optionnel : spécifiez une adresse d'envoi
+            'request': request,
+        }
+        reset_form = PasswordResetForm(data={'email': self.validated_data['email']})
+        assert reset_form.is_valid()
+        reset_form.save(**options)    
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    new_password1 = serializers.CharField(write_only=True)
+    new_password2 = serializers.CharField(write_only=True)
+    uid = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        self.reset_form = SetPasswordForm(user=self.user, data=attrs)
+        if not self.reset_form.is_valid():
+            raise serializers.ValidationError(self.reset_form.errors)
+        return attrs
+
+    def save(self):
+        return self.reset_form.save()
