@@ -626,7 +626,7 @@ class AdminLoginView(APIView):
         Traite les demandes POST pour la connexion des administrateurs.
         """
         logout(request)
-        return Response({'detail': 'Déconnexion réussie.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Deconnexion réussie.'}, status=status.HTTP_200_OK)
     
 
 """class PasswordResetView(views.APIView):
