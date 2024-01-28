@@ -1,0 +1,17 @@
+.avocatrendezvous {
+  padding: 3vh 10vh;
+  background-color: #d9d9d9;
+  margin-bottom: 15vh;
+}
+.titre {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.avocatrendezvous .title {
+  text-align: center;
+  color: #301f17;
+}
+.avocatrendezvous .titre p {
+  color: black;
+}

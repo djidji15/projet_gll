@@ -1,0 +1,26 @@
+.maj {
+  width: 90%;
+  border: 0.7vh solid #987157;
+  margin: auto;
+  background-image: url('../../img/maj.png');
+  background-size: cover;
+  margin-bottom: 15vh;
+}
+.maj h1 {
+  text-align: center;
+  color: #301f17;
+  font-size: 6vh;
+}
+.maj button {
+  border: none;
+  background-color: #987157;
+  color: #d9d9d9;
+  padding: 1vh 3vh;
+  font-size: 4vh;
+  border-radius: 3vh;
+  cursor: pointer;
+}
+.maj .buttonmaj {
+  text-align: center;
+  padding-bottom: 3vh;
+}

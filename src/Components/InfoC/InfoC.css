@@ -7,6 +7,9 @@
   font-weight: 700;
   line-height: normal;
 }
+.bienvenue-container p {
+  color: #301f17;
+}
 .info-container2 input {
   font-family: Inknut Antiqua;
   width: 130px;
@@ -61,4 +64,62 @@
   font-weight: 700;
   line-height: normal;
   cursor: pointer;
+}
+/* Styles pour la superposition lorsque le formulaire est ouvert */
+.modifier-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(152, 113, 87, 0.8); /* Fond semi-transparent */
+  z-index: 1; /* Doit être supérieur à z-index de tous les autres éléments */
+}
+
+/* Styles pour le conteneur du formulaire */
+.modifier-form-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* Doit être supérieur à z-index de la superposition */
+}
+
+/* Styles pour le formulaire lui-même */
+.modifier-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #d9d9d9; /* Couleur de fond du formulaire */
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.modifier-form label {
+  font-size: 2.5vh;
+  font-weight: 400;
+  padding: 1vh;
+}
+.modifier-form input {
+  border: 1px solid #0c0a0a;
+  color: #0c0a0a;
+  font-weight: 400;
+  font-size: 3vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.button-container .enregistrer button {
+  color: #d9d9d9;
+  background-color: #b4774e;
+}
+.button-container .annuler button {
+  color: #d9d9d9;
+  background-color: #b13636;
 }

@@ -1,0 +1,50 @@
+.infoavocat {
+    background-color: #987157;
+    width: 80%;
+    height: 40vh;
+    margin: auto;
+    margin-bottom: 15vh;
+}
+
+.infoavocat .photoavocat img{
+    height: 35vh;
+    width: 35vh;
+    border-radius: 50%;
+    background-color: aliceblue;
+}
+
+.infoavocat .infonote .infoligne{
+    display: flex;
+    align-items: center;
+
+}
+
+.infoavocat .infonote .infoligne p{
+    color: #D9D9D9;
+
+}
+.infoavocat .infonote .infoligne h3{
+    color: #FFFFFF;
+
+}
+.photoinfonote{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10vh;
+    height: 40vh;
+    
+}
+.photoinfonote p {
+    margin-right: 1vh;
+}
+.infoavocat .infonote .info {
+    line-height: 0.8vh;
+}
+
+.infoavocat .infonote .note img {
+    height: 4vh;
+}
+.infoavocat .infonote .note {
+    margin-top: 2vh;
+}

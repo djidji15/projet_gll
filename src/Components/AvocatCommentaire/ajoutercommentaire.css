@@ -1,0 +1,45 @@
+.commentaire {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5vh 2vh;
+  width: 80%;
+}
+
+.commentaire h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.ajoutercommentaire form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+}
+
+.ajoutercommentaire textarea {
+  border-radius: 3vh;
+  width: 100%;
+  height: 7vh;
+  padding: 1vh 2vh;
+  border: #333 0.5vh solid;
+  background-color: #d9d9d9;
+  font-size: 2vh;
+}
+
+.commentaire button {
+  border: 2px solid #d9d9d9;
+  background-color: #301f17;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.commentaire button:hover {
+  background-color: #2980b9;
+}

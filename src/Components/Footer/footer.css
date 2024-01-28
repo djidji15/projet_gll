@@ -1,0 +1,36 @@
+.footer {
+    background-color: black;
+}
+.footer .contact {
+    display: flex;
+
+    justify-content: center;
+    gap: 60vh;
+}
+.footer .contact .social-network .icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vh;
+}
+.footer .contact .social-network .icons img {
+    height: 6.5vh;
+    width: 6.5vh;
+}
+.footer h3,p {
+    color: #949393;
+}
+.footer h4{
+    color: #EFEFEF;
+}
+.footer h3{
+    font-size: 3vh;
+}
+.footer h4{
+    font-size: 3vh;
+}
+.footer .copyright {
+    text-align: center;
+    padding: 1vh;
+    font-size: 2.5vh;
+}

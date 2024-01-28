@@ -72,7 +72,7 @@ export const Input = styled.input`
   border-color: rgba(0, 0, 0, 0.2);
   padding: 12px 15px;
   margin: 8px 0;
-  height: 15px;
+  height: 5px;
   width: 100%;
   ::placeholder {
     color: #ffffff;

@@ -1,0 +1,11 @@
+.faq {
+  width: 30%;
+  margin: 15px;
+  background-color: #efefef;
+  border-radius: 4vh;
+  padding: 1vh 2vh;
+  display: inline-block;
+}
+.faq h4 {
+  color: #301f17;
+}

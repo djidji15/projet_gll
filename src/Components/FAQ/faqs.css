@@ -1,0 +1,10 @@
+.faqs {
+  width: 100%;
+  background-color: #987157;
+  padding: 1vh 0vh;
+  margin-bottom: 10vh;
+  text-align: center;
+}
+.faqs h1 {
+  color: #301f17;
+}

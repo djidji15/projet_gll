@@ -1,0 +1,23 @@
+.avocatnote {
+  width: 55%;
+  background-color: #987157;
+  border-radius: 3vh;
+  margin: auto;
+  margin-bottom: 15vh;
+}
+.avocatnote .titre h1 {
+  margin-left: 40vh;
+  text-align: center;
+  color: #d9d9d9;
+}
+.avocatnote .note img {
+  margin-left: 35vh;
+  height: 8vh;
+}
+.avocatnote .titre {
+  padding-top: 0.5vh;
+  padding-left: 2vh;
+}
+.avocatnote .note {
+  padding-bottom: 4vh;
+}
